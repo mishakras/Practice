@@ -14,13 +14,29 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
     def __init__(self):
         super(Word, self).__init__()
         self.setupUi(self)
+        self.CreateDoc.setAutoFillBackground(True)
+        self.CreateDoc.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.CreateDoc.clicked.connect(self.Create_Document)
+        self.ExerciseType.setAutoFillBackground(True)
+        self.ExerciseType.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.ExerciseType.currentTextChanged.connect(self.Change_Subtype)
+        self.Createexec.setAutoFillBackground(True)
+        self.Createexec.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.Createexec.clicked.connect(self.Create_exercize)
+        self.Finishblock.setAutoFillBackground(True)
+        self.Finishblock.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.Finishblock.clicked.connect(self.Finish_block)
+        self.CreateQuestion.setAutoFillBackground(True)
+        self.CreateQuestion.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.CreateQuestion.clicked.connect(self.Create_Question)
+        self.CreateAnswer.setAutoFillBackground(True)
+        self.CreateAnswer.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.CreateAnswer.clicked.connect(self.Create_Answer)
+        self.FinishQuestion.setAutoFillBackground(True)
+        self.FinishQuestion.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.FinishQuestion.clicked.connect(self.Finish_Question)
+        self.FinishExercize.setAutoFillBackground(True)
+        self.FinishExercize.setStyleSheet('QPushButton {background-color: #00ff7f;} QPushButton:disabled {background-color: #c3c3c3;}')
         self.FinishExercize.clicked.connect(self.Finish_Exercize)
         self.doc=Document()
         self.exercize_count=1
@@ -86,6 +102,7 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
             self.ExerciseSubType.addItem("Нумерованные предложения, лишние слова")
     def Create_exercize(self):
         self.CreateQuestion.setEnabled(False)
+        self.Finishblock.setEnabled(False)
         self.CreateAnswer.setEnabled(False)
         self.FinishQuestion.setEnabled(False)
         self.FinishExercize.setEnabled(False)
@@ -196,6 +213,7 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
             self.AnswerType.addItem("Wrong")
             self.AnswerType.addItem("Right")
     def Create_Question(self):
+        self.FinishExercize.setEnabled(False)
         self.CreateQuestion.setEnabled(False)
         self.CreateAnswer.setEnabled(True)
         tempstr=self.Question.toPlainText()
@@ -244,7 +262,7 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
         if(self.UIType=='Choice'):
             self.FinishQuestion.setEnabled(True)
             if(self.AnswerType.currentText()=="Right"):
-                run = self.doc.add_paragraph().add_run(" ")
+                #run = self.doc.add_paragraph().add_run(" ")
                 paragraph = self.doc.add_paragraph(self.Answer.text()+" ", style='List Bullet 2')
                 run=paragraph.add_run("(+)")
                 run.font.color.rgb=RGBColor(0xff, 0x00, 0x00)
@@ -260,7 +278,8 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
                 run=self.paragraph.add_run("("+self.Answer.text()+")")
                 run.font.color.rgb=RGBColor(0xff, 0x00, 0x00)
                 self.CreateAnswer.setEnabled(False)
-                self.CreateQuestion.setEnabled(True)
+                if(self.ExerciseSubType.currentText()=='Нумерованные предложения'):
+                    self.CreateQuestion.setEnabled(True)
                 self.FinishExercize.setEnabled(True)
             else:
                 if(self.counter==1):
@@ -282,6 +301,7 @@ class Word(QtWidgets.QMainWindow, design.Ui_Word):
             self.CreateQuestion.setEnabled(True)
             self.FinishExercize.setEnabled(True)
     def Finish_Question(self):
+        self.CreateAnswer.setEnabled(False)
         self.FinishQuestion.setEnabled(False)
         if(self.ExerciseType.currentText()=='Drag and drop'):
             if(self.ExerciseSubType.currentText()=='Нумерованные предложения, лишние слова'):
